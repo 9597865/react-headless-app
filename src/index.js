@@ -1,14 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./configs/runConcent";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+
+import { ConfigProvider } from "antd";
+import zhCN from "antd/lib/locale-provider/zh_CN";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ConfigProvider locale={zhCN}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </ConfigProvider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

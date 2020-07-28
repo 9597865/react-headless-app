@@ -1,0 +1,9 @@
+build/*
+public/*
+node_modules/*
+mocker/*
+script/*
+./jsconfig.json
+./package.json
+**/*.test.js
+
