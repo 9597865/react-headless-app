@@ -1,22 +1,15 @@
 import React from "react";
+// 可以自由选择 BrowserRouter HashRouter
+import { Switch, Route, HashRouter } from "react-router-dom";
+import { ConnectRouter } from "react-router-concent";
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import "./App.css";
-
-import ContentPage from "./page/HeadLessCtrl";
-//import "antd/dist/antd.css";
-const { Header, Sider, Content } = Layout;
-
+import { ConfigProvider, Layout, Menu } from "antd";
+// 布局组件
+import LayoutBasic from "@/layouts/Basic";
 class App extends React.Component {
   state = {
     collapsed: false,
+    windowHeight: window.innerHeight,
   };
 
   toggle = () => {
@@ -25,45 +18,31 @@ class App extends React.Component {
     });
   };
 
+  // componentDidMount() {
+  //   window.addEventListener('resize', this.handleResize);
+  // }
+
+  // componentWillUnmount() {
+  //   window.removeEventListener('resize', this.handleResize);
+  // }
+
+  // handleResize = () => {
+  //   this.setState({ windowHeight: window.innerHeight });
+  // }
+
   render() {
     return (
-      <Layout>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              nav 1
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background">
-            {React.createElement(
-              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-              {
-                className: "trigger",
-                onClick: this.toggle,
-              }
-            )}
-          </Header>
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            <ContentPage></ContentPage>
-          </Content>
-        </Layout>
-      </Layout>
+      <>
+        <LayoutBasic />
+      </>
+      // <HashRouter>
+      //   <ConnectRouter />
+      //   <ConfigProvider locale={zhCN}>
+      //     <Switch>
+      //       <Route path="/" component={Layout} />
+      //     </Switch>
+      //   </ConfigProvider>
+      // </HashRouter>
     );
   }
 }

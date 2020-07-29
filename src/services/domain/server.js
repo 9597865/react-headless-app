@@ -2,8 +2,10 @@ import http from "@/services/http";
 import Mock from "mockjs";
 import map from "lodash/map";
 
-const URL_SERVER_DATAS = "txcloud/server_list_data";
-
+const URL_SERVER_DATAS = "headless/config";
+const URL_SERVER_TIMESNAP = "headless/post";
+const URL_SERVER_GET_PERCENT_TIMESNAP = "headless/percent";
+// http://9.134.16.93:8080/headless/post
 const mockListData = { data: [], page: { total: 10 } };
 const initMockListData = () => {
   const tableData = [];
@@ -26,6 +28,8 @@ const initMockListData = () => {
 mockListData.data = initMockListData();
 
 export const getItems = (params) => http.get(URL_SERVER_DATAS, params);
-
+export const postTimeSnap = (params) => http.post(URL_SERVER_TIMESNAP, params);
+export const getTimeSnapPercent = (params) =>
+  http.get(URL_SERVER_GET_PERCENT_TIMESNAP, params);
 // console.log(mockListData);
 // export const getItems = params => mockListData;

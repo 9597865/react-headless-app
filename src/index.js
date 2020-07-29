@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+// 路由相关
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import "./configs/runConcent";
 import "./index.css";
 import App from "./App";
@@ -7,10 +10,15 @@ import * as serviceWorker from "./serviceWorker";
 
 import { ConfigProvider } from "antd";
 import zhCN from "antd/lib/locale-provider/zh_CN";
-
+// 初始化路由和store
+// export const history = createBrowserHistory();
 ReactDOM.render(
   <ConfigProvider locale={zhCN}>
-    <App />
+    <BrowserRouter basename="/">
+      {/* <Switch> */}
+      <Route path="/" component={App} />
+      {/* </Switch> */}
+    </BrowserRouter>
   </ConfigProvider>,
   document.getElementById("root")
 );

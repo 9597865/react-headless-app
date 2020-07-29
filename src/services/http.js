@@ -108,12 +108,22 @@ const method_multiMethodName = {
  * @param {any} defaultValue
  * @param {*} options
  */
-async function sendMultiSameRequest(method, urlItems, defaultValue = '', options = {}) {
+async function sendMultiSameRequest(
+  method,
+  urlItems,
+  defaultValue = '',
+  options = {},
+) {
   try {
     const _urlItems = urlItems.map(item => attachPrefixAndData(item.url));
-    const failStrategy = options.failStrategy !== undefined ? options.failStrategy : cute.const.KEEP_ALL_BEEN_EXECUTED;
+    const failStrategy =      options.failStrategy !== undefined
+      ? options.failStrategy
+      : cute.const.KEEP_ALL_BEEN_EXECUTED;
     const mName = method_multiMethodName[method];
-    const replyList = await cute[mName](_urlItems, { ...generalOptions, failStrategy });
+    const replyList = await cute[mName](_urlItems, {
+      ...generalOptions,
+      failStrategy,
+    });
     return replyList.map(r => checkCode(method, r));
   } catch (err) {
     return handleError(err, options, defaultValue);
@@ -198,7 +208,12 @@ const http = async ({ checkFn = checkCode, defaultValue, ...options }) => {
         type: 'jsonp',
         url: `${options.url}?${qs.stringify(options.data)}`,
       });
-      return checkFn(options.method, data, options.url, options.returnServerData);
+      return checkFn(
+        options.method,
+        data,
+        options.url,
+        options.returnServerData,
+      );
     }
     // get 请求通过params发送参数
     if (options.method === 'get' || !options.method) {

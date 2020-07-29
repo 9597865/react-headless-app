@@ -1,4 +1,4 @@
-const level = process.env.NODE_ENV === 'production' ? 2 : 1
+const level = process.env.NODE_ENV === "production" ? 2 : 1;
 
 module.exports = {
   root: true,
@@ -16,8 +16,8 @@ module.exports = {
   },
   settings: {
     react: {
-      version: "detect"
-    }
+      version: "detect",
+    },
   },
   plugins: ["react", "react-hooks", "jsx-a11y"],
   rules: {
@@ -58,4 +58,3 @@ module.exports = {
     },
   ],
 };
-
