@@ -264,14 +264,17 @@ const CtrlBox = React.memo((props) => {
             网页-链接:
           </a>
         </WrapperSpan>
-        <WrapperSpan style={{ width: "90%" }}>
+        {/* <WrapperSpan style={{ width: "90%" }}>
           <Input
             addonBefore="http://"
             suffix=""
             value={newWebUrlPath}
             defaultValue={defaultParam.webUrl}
           />
-        </WrapperSpan>
+        </WrapperSpan> */}
+        <a href={newWebUrlPath} target="blank">
+          {newWebUrlPath}
+        </a>
       </Wrapper>
       <Wrapper>
         <WrapperSpan>过场-效果:</WrapperSpan>
