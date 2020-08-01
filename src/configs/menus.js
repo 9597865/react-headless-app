@@ -5,13 +5,13 @@
  */
 import React from 'react';
 import {
-  UserOutlined,
-  //   VideoCameraOutlined,
+  //  UserOutlined,
+  VideoCameraOutlined,
   //   UploadOutlined,
 } from '@ant-design/icons';
 export default [
   {
-    icon: <UserOutlined />,
+    icon: <VideoCameraOutlined />,
     name: '截图服务',
     path: '/',
   },

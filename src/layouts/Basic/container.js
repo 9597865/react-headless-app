@@ -1,6 +1,6 @@
-import React from 'react';
-import { Switch, Route, Link, NavLink } from 'react-router-dom';
-import { ConfigProvider, Layout, Menu, Icon } from 'antd';
+import React from "react";
+import { Switch, Route, Link, NavLink } from "react-router-dom";
+import { ConfigProvider, Layout, Menu, Icon, Typography, Divider } from "antd";
 
 import {
   MenuUnfoldOutlined,
@@ -8,15 +8,17 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
-import '@/App.css';
+} from "@ant-design/icons";
+import "@/App.css";
 
-import { routes, menus } from '@/configs';
+import { routes, menus } from "@/configs";
 
-import Global from '@/configs/global';
+import Global from "@/configs/global";
 
 // import "antd/dist/antd.css";
 const { Header, Sider, Content } = Layout;
+
+const { Title, Paragraph, Text } = Typography;
 
 // 查找children里第一个path
 const getPath = (menus = []) => {
@@ -25,7 +27,7 @@ const getPath = (menus = []) => {
     if (path) return path;
     menus = children;
   }
-  return 'not-found';
+  return "not-found";
 };
 
 class Container extends React.Component {
@@ -57,11 +59,11 @@ class Container extends React.Component {
     return (
       <>
         <Header className="site-layout-background">
-          <div style={{ fontSize: '24px', color: '#fff' }}>{Global.title}</div>
+          <div style={{ fontSize: "24px", color: "#fff" }}>{Global.title}</div>
         </Header>
         <Layout>
           <Sider
-            style={{ height: 'calc(100vh - 64px)' }}
+            style={{ height: "calc(100vh - 64px)" }}
             trigger={null}
             collapsible
             collapsed={this.state.collapsed}
@@ -88,28 +90,40 @@ class Container extends React.Component {
             </Menu>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background">
-              {React.createElement(
-                this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-                {
-                  className: 'trigger',
-                  onClick: this.toggle,
-                },
-              )}
-            </Header>
             <Content
               className="site-layout-background"
               style={{
-                margin: '24px 16px',
+                margin: "24px 16px",
                 padding: 24,
                 minHeight: 240,
               }}
             >
+              <Title level={2}>Timesnap</Title>
+              <Paragraph>
+                网页转视频功能，可以提供h5转视频服务。转换后可以下载视频，或者png序列帧。
+              </Paragraph>
+              <Paragraph>
+                 依赖库:
+                <a href="https://github.com/tungs/timesnap" target="blank">
+                  https://github.com/tungs/timesnap
+                </a>
+              </Paragraph>
+              <Divider />
               <Switch>
-                {routes.map((props, index) => <Route key={index} {...props} />)}
-                {console.log(routes)}
+                {routes.map((props, index) => (
+                  <Route key={index} {...props} />
+                ))}
               </Switch>
             </Content>
+            <Header className="site-layout-background">
+              {React.createElement(
+                this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                {
+                  className: "trigger",
+                  onClick: this.toggle,
+                }
+              )}
+            </Header>
           </Layout>
         </Layout>
       </>

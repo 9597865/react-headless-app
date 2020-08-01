@@ -15,3 +15,7 @@ code {
 #root {
   height: 100vh;
 }
+
+.site-result-demo-error-icon {
+  color: red;
+}
