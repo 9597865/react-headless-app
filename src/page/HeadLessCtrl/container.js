@@ -7,12 +7,14 @@ import {
   InputNumber,
   message,
   Modal,
+  Tooltip,
 } from "antd";
 import styled from "styled-components";
 import { useConcent } from "concent";
 import { MODEL_NAME } from "./_model/index";
 import rcolor from "rcolor";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, CloseCircleTwoTone } from "@ant-design/icons";
+
 let interval = 0;
 let getDataTimes = 0;
 const { Option } = Select;
@@ -226,17 +228,15 @@ const CtrlBox = React.memo((props) => {
 
   const progressText = (times) => (
     <div>
-      <Button
-        shape="circle"
-        icon={<CloseOutlined />}
-        size="small"
-        type="primary"
-        danger
-        onClick={() => {
-          destoryRun();
-          console.log("暂停");
-        }}
-      />
+      <Tooltip title="停止任务">
+        <CloseCircleTwoTone
+          style={{ color: "red" }}
+          danger
+          onClick={() => {
+            destoryRun();
+          }}
+        />
+      </Tooltip>
       <span>正在生成中{mutiPoint(times)}</span>
     </div>
   );
@@ -255,7 +255,11 @@ const CtrlBox = React.memo((props) => {
           <a
             href={newWebUrlPath}
             target="blank"
-            style={{ color: `${rcolor()}` }}
+            style={{
+              padding: 2,
+              backgroundColor: "#000",
+              color: `${rcolor()}`,
+            }}
           >
             网页-链接:
           </a>
