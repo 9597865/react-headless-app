@@ -3,17 +3,17 @@
  *  支持多级嵌套
  *  默认key是name, 不要有重复的name
  */
-import React from 'react';
+import React from "react";
 import {
   //  UserOutlined,
   VideoCameraOutlined,
   //   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 export default [
   {
     icon: <VideoCameraOutlined />,
-    name: '截图服务',
-    path: '/',
+    name: "图片转场服务",
+    path: "/",
   },
   //   {
   //     icon: <VideoCameraOutlined />,
