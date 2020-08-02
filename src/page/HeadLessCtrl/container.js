@@ -13,10 +13,17 @@ import styled from "styled-components";
 import { useConcent } from "concent";
 import { MODEL_NAME } from "./_model/index";
 import rcolor from "rcolor";
-import { CloseOutlined, CloseCircleTwoTone } from "@ant-design/icons";
-
+import {
+  CloseOutlined,
+  CloseCircleTwoTone,
+  FileZipOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import "video-react/dist/video-react.css"; // import css
+import { Player } from "video-react";
 let interval = 0;
 let getDataTimes = 0;
+
 const { Option } = Select;
 const webUrlPath = "video.cross.webdev.com/h5/work/headlessWeb/gl/page.html";
 const defaultParam = {
@@ -62,6 +69,14 @@ const setup = (ctx) => {
   const onChangeStageHeight = (value) => {
     ctx.setState({ pageHeight: value });
     initUpdate();
+  };
+
+  const onVideoShow = () => {
+    ctx.setState({ isVideoShow: true });
+  };
+
+  const onVideoHide = () => {
+    ctx.setState({ isVideoShow: false });
   };
 
   const initUpdate = () => {
@@ -161,6 +176,8 @@ const setup = (ctx) => {
     successFun,
     errorFun,
     mutiPoint,
+    onVideoShow,
+    onVideoHide,
   };
 };
 
@@ -175,6 +192,7 @@ const iState = {
   pngFolderPath: "",
   percent: 0,
   isDownloadShow: false,
+  isVideoShow: false,
 };
 
 const CtrlBox = React.memo((props) => {
@@ -193,6 +211,7 @@ const CtrlBox = React.memo((props) => {
       listData,
       percent,
       isDownloadShow,
+      isVideoShow,
       pngFolderPath,
     },
     settings: {
@@ -206,6 +225,8 @@ const CtrlBox = React.memo((props) => {
       successFun,
       errorFun,
       mutiPoint,
+      onVideoShow,
+      onVideoHide,
     },
     moduleComputed: mcu,
     moduleReducer: mrd,
@@ -231,7 +252,6 @@ const CtrlBox = React.memo((props) => {
       <Tooltip title="停止任务">
         <CloseCircleTwoTone
           style={{ color: "red" }}
-          danger
           onClick={() => {
             destoryRun();
           }}
@@ -240,6 +260,16 @@ const CtrlBox = React.memo((props) => {
       <span>正在生成中{mutiPoint(times)}</span>
     </div>
   );
+
+  const getMp4Url = (filePath) =>
+    `http://${window.location.host}/dist/${filePath}/out.mp4`;
+
+  const downMp4 = (filePath) => {
+    const hostUrl = getMp4Url(filePath);
+    setTimeout(() => {
+      window.open(hostUrl);
+    }, 300);
+  };
 
   const downZip = (filePath) => {
     const hostUrl = `http://${window.location.host}/dist/${filePath}/snap.zip`;
@@ -250,6 +280,22 @@ const CtrlBox = React.memo((props) => {
 
   return (
     <>
+      <div>
+        <Modal
+          title="预览"
+          visible={isVideoShow}
+          onOk={onVideoHide}
+          onCancel={onVideoHide}
+          width={600}
+          height={480}
+          centered
+          footer={[null, null]}
+        >
+          <Player autoPlay>
+            <source src={getMp4Url(pngFolderPath)} />
+          </Player>
+        </Modal>
+      </div>
       <Wrapper>
         <WrapperSpan>
           <a
@@ -301,8 +347,8 @@ const CtrlBox = React.memo((props) => {
             onChange={styleTimeHandlerChange}
           >
             {defaultParam.webStyleSecondArr.map((item, index) => (
-              <Option value={index} key={index}>
-                {index}秒
+              <Option value={index + 1} key={index}>
+                {index + 1}秒
               </Option>
             ))}
           </Select>
@@ -368,33 +414,45 @@ const CtrlBox = React.memo((props) => {
           : ""}
       </Wrapper>
       <Wrapper>
-        {percent === -1 && isDownloadShow ? (
-          <Button
-            onClick={() => {
-              downZip(pngFolderPath);
-            }}
-          >
-            下载压缩包
-          </Button>
-        ) : (
-          ""
-        )}
+        <WrapperSpan>
+          {percent === -1 && isDownloadShow ? (
+            <Button
+              icon={<FileZipOutlined />}
+              onClick={() => {
+                downZip(pngFolderPath);
+              }}
+            >
+              下载压缩包
+            </Button>
+          ) : (
+            ""
+          )}
+        </WrapperSpan>
+        <WrapperSpan>
+          {percent === -1 && isDownloadShow ? (
+            <Button
+              icon={<VideoCameraOutlined />}
+              onClick={() => {
+                // downMp4(pngFolderPath);
+                onVideoShow();
+              }}
+            >
+              下载Mp4视频
+            </Button>
+          ) : (
+            ""
+          )}
+        </WrapperSpan>
+        <WrapperSpan>
+          {percent > 0 ? (
+            <Wrapper style={{ width: 370 }}>
+              <Progress percent={percent} size="small" status="active" />
+            </Wrapper>
+          ) : (
+            ""
+          )}
+        </WrapperSpan>
       </Wrapper>
-      <Wrapper>
-        {percent > 0 ? (
-          <Wrapper style={{ width: 370 }}>
-            <Progress percent={percent} size="small" status="active" />
-          </Wrapper>
-        ) : (
-          ""
-        )}
-      </Wrapper>
-      {/* <Wrapper>
-        <Button onClick={() => {
-          // success();
-          errorFun();
-        }}>测试按钮</Button>
-      </Wrapper> */}
     </>
   );
 });
