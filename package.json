@@ -14,6 +14,7 @@
     "concent-plugin-loading": "^2.0.3",
     "connected-react-router": "^6.8.0",
     "cute-http": "^2.0.9",
+    "html2canvas": "^1.0.0-rc.5",
     "loadjs": "^4.2.0",
     "lodash": "^4.17.19",
     "qs": "^6.9.4",
