@@ -1,1 +1,1 @@
-export { default as picshow } from './PicShow';
+export { default as Web2Canvas } from './Web2Canvas';

@@ -12,11 +12,11 @@ import {
 import styled from 'styled-components';
 import { useConcent } from 'concent';
 import { MODEL_NAME } from './_model/index';
+
 import h2c from 'html2canvas';
 import rcolor from 'rcolor';
 
-// import EffectShow from '../comp/picshow/PicShow';
-import { picshow } from '../comp/picshow';
+import { Web2Canvas } from '../comp/picshow';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -34,17 +34,20 @@ const WrapperImg = styled.div`
 `;
 
 const setup = (ctx) => {
-  const { fetch } = ctx.moduleReducer;
-  ctx.effect(() => {
-    console.log(picshow);
-  }, []);
-  return {
+  const { fetch, fetchPicUrl } = ctx.moduleReducer;
 
+  ctx.effect(() => {
+    // console.log('=======Web2Canvas=======');
+    // console.log(Web2Canvas);
+  }, []);
+
+  return {
+    fetchPicUrl,
   };
 };
 
 const iState = {
-  imageArr: [
+  imagePathArr: [
     'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/01.jpg',
     'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/02.jpg',
   ],
@@ -69,9 +72,9 @@ const WebSnapBox = React.memo((props) => {
     state: iState,
   };
   const ctx = useConcent(ops);
-  const { state: { imageArr },
+  const { state: { imagePathArr },
     settings: {
-
+      fetchPicUrl,
     },
     moduleComputed: mcu,
     moduleReducer: mrd,
@@ -92,11 +95,13 @@ const WebSnapBox = React.memo((props) => {
         </Paragraph>
         <Divider />
       </Wrapper>
+      <Web2Canvas picList={imagePathArr} style={'demo1'}></Web2Canvas>
       <WrapperImg>
         {
-          imageArr.map((item, index) => <img src={item} key={index} />)
+          // imagePathArr.map((item, index) => <img src={item} key={index} />)
         }
       </WrapperImg>
+
       <Wrapper>
         <Button
           icon={<FileZipOutlined />}
@@ -104,9 +109,10 @@ const WebSnapBox = React.memo((props) => {
           shape="round"
           size={'large'}
           onClick={() => {
-            h2c(document.body).then((canvas) => {
-              document.body.appendChild(canvas);
-            });
+            // h2c(document.body).then((canvas) => {
+            //   document.body.appendChild(canvas);
+            // });
+            // fetchPicUrl({ name: 'html2canvas', imagePathList: imagePathArr });
           }}
         >
           开始-网页转视频

@@ -2,6 +2,7 @@
   "name": "react-headless-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@babel/core": "^7.10.5",
     "@testing-library/jest-dom": "^4.2.4",
@@ -15,6 +16,7 @@
     "connected-react-router": "^6.8.0",
     "cute-http": "^2.0.9",
     "html2canvas": "^1.0.0-rc.5",
+    "img-load": "^2.0.0",
     "loadjs": "^4.2.0",
     "lodash": "^4.17.19",
     "qs": "^6.9.4",
