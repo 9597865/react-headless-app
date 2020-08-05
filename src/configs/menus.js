@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import {
+  CameraOutlined,
   PictureOutlined,
   //  UserOutlined,
   VideoCameraOutlined,
@@ -17,8 +18,13 @@ export default [
     path: '/',
   },
   {
-    icon: <VideoCameraOutlined />,
+    icon: <CameraOutlined />,
     name: '图片转场服务-beta',
     path: '/websnap',
+  },
+  {
+    icon: <VideoCameraOutlined />,
+    name: '变速播放器-beta',
+    path: '/webratevideo',
   },
 ];

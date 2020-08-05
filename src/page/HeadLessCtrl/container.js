@@ -20,9 +20,9 @@ import {
   FileZipOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import 'video-react/dist/video-react.css'; // import css
+import 'video-react/dist/video-react.css';
 import { Player } from 'video-react';
-;
+
 let interval = 0;
 let getDataTimes = 0;
 
@@ -282,7 +282,7 @@ const CtrlBox = React.memo((props) => {
   };
 
   return (
-    <>
+    <div style={{ minHeight: 1200 }}>
       <div>
         <Modal
           title="预览"
@@ -474,7 +474,7 @@ const CtrlBox = React.memo((props) => {
             )}
         </WrapperSpan>
       </Wrapper>
-    </>
+    </div>
   );
 });
 export default CtrlBox;

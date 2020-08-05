@@ -16,7 +16,7 @@ import { MODEL_NAME } from './_model/index';
 import h2c from 'html2canvas';
 import rcolor from 'rcolor';
 
-import { Web2Canvas } from '../comp/picshow';
+import { Web2Canvas, WebVideo } from '../comp/picshow';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -48,8 +48,10 @@ const setup = (ctx) => {
 
 const iState = {
   imagePathArr: [
-    'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/01.jpg',
-    'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/02.jpg',
+    // 'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/01.jpg',
+    // 'http://video.cross.webdev.com/h5/work/headlessWeb/gl/images/02.jpg',
+    './images/01.jpg',
+    './images/02.jpg',
   ],
   webUrl: '',
   el: '#content',

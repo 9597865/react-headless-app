@@ -16,6 +16,11 @@ const routes = [
     exact: true,
     component: loadable(() => import('../page/WebSnap')),
   },
+  {
+    path: '/webratevideo',
+    exact: true,
+    component: loadable(() => import('../page/WebRateVideo')),
+  },
 ];
 
 // routes.push({
