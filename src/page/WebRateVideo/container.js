@@ -12,7 +12,9 @@ import {
 import styled from 'styled-components';
 import { useConcent, emit } from 'concent';
 import { MODEL_NAME } from './_model/index';
-
+import marked from 'marked';
+import hljs from 'highlight.js';
+import loadjs from 'loadjs';
 import WebRateVideo from '../comp/picshow/WebRateVideo';
 
 const { Title, Paragraph, Text } = Typography;
@@ -30,10 +32,15 @@ const WrapperImg = styled.div`
   }
 `;
 
+loadjs(['./css/monokai_sublime.min.css'], 'web2canvas', {
+  async: false,
+});
+
 const setup = (ctx) => {
   const { fetch } = ctx.moduleReducer;
 
   ctx.effect(() => {
+
   }, []);
 
   return {
@@ -43,9 +50,17 @@ const setup = (ctx) => {
 
 const iState = {
   videoUrl: 'http://video.cross.webdev.com/h5/dist/jz.mp4',
+  timeRate: [
+    { t: '00:03.59', r: 5 },
+    { t: '00:25.97', r: 3 },
+    { t: '00:33.91', r: 1.5 },
+    { t: '00:40.53', r: 5 },
+    { t: '00:55.29', r: 1 },
+  ],
   pageWidth: 375,
   pageHeight: 667,
   isVideoShow: false,
+  playTitle: '开始播放',
 };
 
 const WebRateVideoBox = React.memo((props) => {
@@ -55,8 +70,15 @@ const WebRateVideoBox = React.memo((props) => {
     setup,
     state: iState,
   };
+
   const ctx = useConcent(ops);
-  const { state: { videoUrl },
+
+  const {
+    state: {
+      videoUrl,
+      playTitle,
+      timeRate,
+    },
     settings: {
     },
     moduleComputed: mcu,
@@ -64,7 +86,29 @@ const WebRateVideoBox = React.memo((props) => {
     moduleState: ms,
   } = ctx;
 
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false,
+    highlight(code) {
+      return hljs.highlightAuto(code).value;
+    },
+  });
+
   const webRateVideo = React.createRef();
+
+  const setPlayTitle = title => ctx.setState({ playTitle: title });
+
+  const playAndPause = () => {
+    const { current: ref } = webRateVideo;
+    ref.isPause() ? ref.play() : ref.pause();
+    ref.isPause() ? setPlayTitle('暂停') : setPlayTitle('开始播放');
+  };
 
   return (
     <>
@@ -74,26 +118,50 @@ const WebRateVideoBox = React.memo((props) => {
           网页视频-变速播放器
         </Paragraph>
         <Divider />
+        <WebRateVideo ref={webRateVideo} videoUrl={videoUrl} timeRate={timeRate} ></WebRateVideo>
+        <Divider />
+        <Title level={4}>组件调用</Title>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: marked(`
+              <WebRateVideo videoUrl={videoUrl} timeRate = {timeRate} ></WebRateVideo>
+            `),
+          }}
+        />
+        <Title level={4}>传入参数格式</Title>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: marked(`
+
+            videoUrl:'http://video.cross.webdev.com/h5/dist/jz.mp4'
+            t:为时间节点
+            r:为速率
+
+            timeRate: [
+              {t: '00:03.59', r: 5 },
+              {t: '00:25.97', r: 3 },
+              {t: '00:33.91', r: 1.5 },
+              {t: '00:40.53', r: 5 },
+              {t: '00:55.29', r: 1 },
+            ]
+            `),
+          }}
+        />
+        <Paragraph>
+          <Text strong>
+          </Text>
+        </Paragraph>
       </Wrapper>
-      <WebRateVideo ref={webRateVideo} videoUrl={videoUrl} ></WebRateVideo>
-      <Wrapper>
+      {/* <Wrapper>
         <Button
-          icon={<FileZipOutlined />}
           type="primary"
           shape="round"
           size={'large'}
-          onClick={() => {
-            if (webRateVideo.current.isPause()) {
-              webRateVideo.current.play();
-            } else {
-              webRateVideo.current.pause();
-            }
-          }}
+          onClick={playAndPause}
         >
-          {/* {(webRateVideo.current.isPause()) ? '开始播放' : '暂停'} */}
-          开始播放
+          {playTitle}
         </Button>
-      </Wrapper>
+      </Wrapper> */}
     </>
   );
 });

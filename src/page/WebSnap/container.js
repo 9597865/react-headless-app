@@ -16,8 +16,7 @@ import { MODEL_NAME } from './_model/index';
 import h2c from 'html2canvas';
 import rcolor from 'rcolor';
 
-import { Web2Canvas, WebVideo } from '../comp/picshow';
-
+import Web2Canvas from '../comp/picshow/Web2Canvas';
 const { Title, Paragraph, Text } = Typography;
 
 const Wrapper = styled.div`
@@ -98,12 +97,6 @@ const WebSnapBox = React.memo((props) => {
         <Divider />
       </Wrapper>
       <Web2Canvas picList={imagePathArr} style={'demo1'}></Web2Canvas>
-      <WrapperImg>
-        {
-          // imagePathArr.map((item, index) => <img src={item} key={index} />)
-        }
-      </WrapperImg>
-
       <Wrapper>
         <Button
           icon={<FileZipOutlined />}
@@ -115,6 +108,7 @@ const WebSnapBox = React.memo((props) => {
             //   document.body.appendChild(canvas);
             // });
             // fetchPicUrl({ name: 'html2canvas', imagePathList: imagePathArr });
+            alert('暂时装修中...！');
           }}
         >
           开始-网页转视频

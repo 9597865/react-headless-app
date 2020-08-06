@@ -12,12 +12,12 @@ const routes = [
     component: loadable(() => import('../page/HeadLessCtrl')),
   },
   {
-    path: '/websnap',
+    path: '/snap',
     exact: true,
     component: loadable(() => import('../page/WebSnap')),
   },
   {
-    path: '/webratevideo',
+    path: '/ratevideo',
     exact: true,
     component: loadable(() => import('../page/WebRateVideo')),
   },
