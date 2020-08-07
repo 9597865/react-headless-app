@@ -120,7 +120,7 @@ const WebRateVideoBox = React.memo((props) => {
         <Divider />
         <WebRateVideo ref={webRateVideo} videoUrl={videoUrl} timeRate={timeRate} ></WebRateVideo>
         <Divider />
-        <Title level={4}>组件调用</Title>
+        <Title level={4}>组件调用:</Title>
         <div
           dangerouslySetInnerHTML={{
             __html: marked(`
@@ -128,7 +128,7 @@ const WebRateVideoBox = React.memo((props) => {
             `),
           }}
         />
-        <Title level={4}>传入参数格式</Title>
+        <Title level={4}>传入参数格式:</Title>
         <div
           dangerouslySetInnerHTML={{
             __html: marked(`

@@ -83,7 +83,8 @@ class Container extends React.Component {
 
   settingMenuSelectedKey = () => {
     const { pathname, hash } = location;
-    const arrIndex = findIndex(menus, { path: hash.substring(1, hash.length) });
+    // const arrIndex = findIndex(menus, { path: hash.substring(1, hash.length) });
+    const arrIndex = findIndex(menus, { path: pathname });
     this.setState({
       selectedCurrnetKey: arrIndex,
     });

@@ -1,3 +1,3 @@
 export default {
-  title: 'HeadLess 网页转视频服务',
+  title: 'Cross 网页与视频服务',
 };

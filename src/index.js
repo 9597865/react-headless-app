@@ -14,11 +14,11 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 // export const history = createBrowserHistory();
 ReactDOM.render(
   <ConfigProvider locale={zhCN}>
-    <HashRouter basename="/">
+    <BrowserRouter basename="/">
       {/* <Switch> */}
       <Route path="/" component={App} />
       {/* </Switch> */}
-    </HashRouter>
+    </BrowserRouter>
   </ConfigProvider>,
   document.getElementById('root'),
 );

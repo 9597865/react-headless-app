@@ -20,6 +20,7 @@ import {
   FileZipOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
+import Iframe from 'react-iframe';
 import 'video-react/dist/video-react.css';
 import { Player } from 'video-react';
 
@@ -41,6 +42,7 @@ const defaultParam = {
 const Wrapper = styled.div`
   margin-bottom: 16px;
 `;
+
 const WrapperSpan = styled.span`
   display: inline-block;
   margin-right: 10px;
@@ -317,6 +319,15 @@ const CtrlBox = React.memo((props) => {
             https://github.com/tungs/timesnap
           </a>
         </Paragraph>
+        <Iframe
+          frameBorder='0'
+          url={newWebUrlPath}
+          width="300px"
+          height="300px"
+          id="myId"
+          className="myClassname"
+          display="initial"
+          position="relative" />
         <Divider />
         <WrapperSpan>
           <a
