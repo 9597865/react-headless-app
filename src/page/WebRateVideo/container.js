@@ -1,13 +1,18 @@
 import React from 'react';
 import {
+  message,
   Typography,
   Button,
   Divider,
-} from 'antd';
+  Input,
+  Select } from 'antd';
 
 import {
+  PlayCircleOutlined,
+  SettingOutlined,
   FileZipOutlined,
 } from '@ant-design/icons';
+
 
 import styled from 'styled-components';
 import { useConcent, emit } from 'concent';
@@ -17,6 +22,7 @@ import hljs from 'highlight.js';
 import loadjs from 'loadjs';
 import WebRateVideo from '../comp/picshow/WebRateVideo';
 
+const { TextArea } = Input;
 const { Title, Paragraph, Text } = Typography;
 
 const Wrapper = styled.div`
@@ -40,22 +46,57 @@ const setup = (ctx) => {
   const { fetch } = ctx.moduleReducer;
 
   ctx.effect(() => {
-
   }, []);
+
+
+  const setRateVideoData = ($refWebRateVideo, $refTaVideoUrl) => {
+    try {
+      const inputVideoValue = $refWebRateVideo.current.state.value;
+      const taValue = JSON.parse($refTaVideoUrl.current.state.value);
+      ctx.setState({ videoUrl: inputVideoValue, timeRate: taValue });
+      message.success('装载数据成功');
+    } catch (error) {
+      message.error('JSON 数据结构解释失败');
+    }
+  };
+
+  const textareaOnChange = (data) => {
+    console.log(data);
+  };
 
   return {
     fetch,
+    setRateVideoData,
+    textareaOnChange,
   };
 };
 
 const iState = {
+  // videoUrl: 'http://video.cross.webdev.com/h5/dist/jzvideo.mp4',
   videoUrl: 'http://video.cross.webdev.com/h5/dist/jz.mp4',
+  videoWidth: 480,
+  videoHeight: 360,
+  textAreaVideoValue: '',
   timeRate: [
-    { t: '00:03.59', r: 5 },
-    { t: '00:25.97', r: 3 },
-    { t: '00:33.91', r: 1.5 },
-    { t: '00:40.53', r: 5 },
-    { t: '00:55.29', r: 1 },
+    { t: '00:00.00', r: 5 },
+    { t: '00:06.23', r: 1 },
+    { t: '00:11.24', r: 5 },
+    { t: '01:30.26', r: 1 },
+    { t: '01:35.27', r: 5 },
+    { t: '02:36.11', r: 1 },
+    { t: '02:41.12', r: 5 },
+    { t: '03:36.08', r: 1 },
+    { t: '03:41.09', r: 5 },
+    { t: '04:41.26', r: 1 },
+    { t: '04:46.27', r: 5 },
+    { t: '05:22.26', r: 1 },
+    { t: '05:27.27', r: 5 },
+    { t: '06:01.29', r: 1 },
+    { t: '06:07.00', r: 5 },
+    { t: '06:30.20', r: 1 },
+    { t: '06:35.21', r: 5 },
+    { t: '07:11.14', r: 1 },
+    { t: '07:16.15', r: 5 },
   ],
   pageWidth: 375,
   pageHeight: 667,
@@ -76,10 +117,13 @@ const WebRateVideoBox = React.memo((props) => {
   const {
     state: {
       videoUrl,
-      playTitle,
       timeRate,
+      videoWidth,
+      videoHeight,
     },
     settings: {
+      setRateVideoData,
+      textareaOnChange,
     },
     moduleComputed: mcu,
     moduleReducer: mrd,
@@ -100,15 +144,18 @@ const WebRateVideoBox = React.memo((props) => {
     },
   });
 
-  const webRateVideo = React.createRef();
+  const $refWebRateVideo = React.createRef();
+  const $refInputVideoUrl = React.createRef();
+  const $refTaVideoUrl = React.createRef();
 
   const setPlayTitle = title => ctx.setState({ playTitle: title });
 
   const playAndPause = () => {
-    const { current: ref } = webRateVideo;
+    const { current: ref } = $refWebRateVideo;
     ref.isPause() ? ref.play() : ref.pause();
     ref.isPause() ? setPlayTitle('暂停') : setPlayTitle('开始播放');
   };
+
 
   return (
     <>
@@ -118,13 +165,51 @@ const WebRateVideoBox = React.memo((props) => {
           网页视频-变速播放器
         </Paragraph>
         <Divider />
-        <WebRateVideo ref={webRateVideo} videoUrl={videoUrl} timeRate={timeRate} ></WebRateVideo>
+        <WebRateVideo
+          ref={$refWebRateVideo}
+          videoUrl={videoUrl}
+          timeRate={timeRate}
+          width={videoWidth}
+          height={videoHeight} />
+        <Wrapper>
+          <Title level={4}>视频地址:</Title>
+          <Input ref={$refInputVideoUrl} defaultValue={videoUrl} />
+        </Wrapper>
+        <Wrapper>
+          <Title level={4}>变速时间点:</Title>
+          <TextArea
+            defaultValue={JSON.stringify(timeRate)}
+            ref={$refTaVideoUrl}
+            onChange={textareaOnChange}
+            placeholder=""
+            autoSize={{ minRows: 3, maxRows: 5 }}
+          />
+        </Wrapper>
+        <Wrapper>
+          <Button
+            type="primary"
+            shape="round"
+            size={'large'}
+            onClick={() => {
+              setRateVideoData($refInputVideoUrl, $refTaVideoUrl);
+            }}
+          >
+            重新装载数据
+          </Button>
+
+
+        </Wrapper>
         <Divider />
         <Title level={4}>组件调用:</Title>
         <div
           dangerouslySetInnerHTML={{
             __html: marked(`
-              <WebRateVideo videoUrl={videoUrl} timeRate = {timeRate} ></WebRateVideo>
+            <WebRateVideo
+            ref={$refWebRateVideo}
+            videoUrl={videoUrl}
+            timeRate={timeRate}
+            width={videoWidth}
+            height={videoHeight} />
             `),
           }}
         />
@@ -138,12 +223,26 @@ const WebRateVideoBox = React.memo((props) => {
             r:为速率
 
             timeRate: [
-              {t: '00:03.59', r: 5 },
-              {t: '00:25.97', r: 3 },
-              {t: '00:33.91', r: 1.5 },
-              {t: '00:40.53', r: 5 },
-              {t: '00:55.29', r: 1 },
-            ]
+              { t: '00:00.00', r: 5 },
+              { t: '00:06.23', r: 1 },
+              { t: '00:11.24', r: 5 },
+              { t: '01:30.26', r: 1 },
+              { t: '01:35.27', r: 5 },
+              { t: '02:36.11', r: 1 },
+              { t: '02:41.12', r: 5 },
+              { t: '03:36.08', r: 1 },
+              { t: '03:41.09', r: 5 },
+              { t: '04:41.26', r: 1 },
+              { t: '04:46.27', r: 5 },
+              { t: '05:22.26', r: 1 },
+              { t: '05:27.27', r: 5 },
+              { t: '06:01.29', r: 1 },
+              { t: '06:07.00', r: 5 },
+              { t: '06:30.20', r: 1 },
+              { t: '06:35.21', r: 5 },
+              { t: '07:11.14', r: 1 },
+              { t: '07:16.15', r: 5 },
+            ],
             `),
           }}
         />
