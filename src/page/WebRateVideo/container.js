@@ -125,7 +125,6 @@ const setup = (ctx) => {
   };
 };
 
-
 const WebRateVideoBox = React.memo((props) => {
   const ops = {
     props,
