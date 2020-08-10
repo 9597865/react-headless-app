@@ -1,10 +1,11 @@
-import React, { useState, useImperativeHandler, Component } from 'react';
+import React from 'react';
 // import { register, useConcent } from 'concent';
-import { Button, Typography } from 'antd';
+//import { Button, Typography } from 'antd';
 import styled from 'styled-components';
 
 /** player documemt */
 // https://video-react.js.org/components/player/
+
 import 'video-react/dist/video-react.css';
 import { Player, ControlBar, BigPlayButton } from 'video-react';
 import LRC from 'lrc.js';
@@ -18,12 +19,9 @@ const WrapperSpan = styled.span`
   margin-left: 16px;
 `;
 
-const sources = {
-  sintelTrailer: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-  bunnyTrailer: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
-  bunnyMovie: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-  test: 'http://media.w3.org/2010/05/video/movie_300.webm',
-};
+const TxtBox = styled.span`
+  color:red;
+`;
 
 // @register()
 class WebRateVideo extends React.Component {
@@ -86,7 +84,6 @@ class WebRateVideo extends React.Component {
         timeRate,
       };
     }
-    // 否则，对于state不进行任何操作
     return null;
   }
 
@@ -170,15 +167,9 @@ class WebRateVideo extends React.Component {
   };
 
   changeSource = name => () => {
-    if (name === 'jiaozhen') {
-      this.setState({
-        source: this.state.videoUrl,
-      });
-    } else {
-      this.setState({
-        source: sources[name],
-      });
-    }
+    this.setState({
+      source: this.state.videoUrl,
+    });
     this.player.load();
   };
 
@@ -206,78 +197,8 @@ class WebRateVideo extends React.Component {
           播放时间:
           {moment(this.state.currentTime * 1000).format('mm:ss.SSS')}
         </WrapperSpan>
-        <WrapperSpan>倍速:x{this.state.playbackRate}</WrapperSpan>
+        <WrapperSpan>倍速:<TxtBox>x {this.state.playbackRate}</TxtBox></WrapperSpan>
       </Wrapper>
-      {/*
-        <div className="py-3">
-          <Button onClick={this.play} className="mr-3">
-            play()
-          </Button>
-          <Button onClick={this.pause} className="mr-3">
-            pause()
-          </Button>
-          <Button onClick={this.load} className="mr-3">
-            load()
-          </Button>
-        </div>
-        <div className="pb-3">
-          <Button onClick={this.changeCurrentTime(10)} className="mr-3">
-            currentTime += 10
-          </Button>
-          <Button onClick={this.changeCurrentTime(-10)} className="mr-3">
-            currentTime -= 10
-          </Button>
-          <Button onClick={this.seek(50)} className="mr-3">
-            currentTime = 50
-          </Button>
-        </div>
-
-        <div className="pb-3">
-          <Button onClick={this.changePlaybackRateRate(1)} className="mr-3">
-            playbackRate++
-          </Button>
-          <Button onClick={this.changePlaybackRateRate(-1)} className="mr-3">
-            playbackRate--
-          </Button>
-          <Button onClick={this.changePlaybackRateRate(0.1)} className="mr-3">
-            playbackRate+=0.1
-          </Button>
-          <Button onClick={this.changePlaybackRateRate(-0.1)} className="mr-3">
-            playbackRate-=0.1
-          </Button>
-        </div>
-        <div className="pb-3">
-          <Button onClick={this.changeVolume(0.1)} className="mr-3">
-            volume+=0.1
-          </Button>
-          <Button onClick={this.changeVolume(-0.1)} className="mr-3">
-            volume-=0.1
-          </Button>
-          <Button onClick={this.setMuted(true)} className="mr-3">
-            muted=true
-          </Button>
-          <Button onClick={this.setMuted(false)} className="mr-3">
-            muted=false
-          </Button>
-        </div>
-        <div className="pb-3">
-          <Button onClick={this.changeSource('jiaozhen')} className="mr-3">
-            cross较真视频
-          </Button>
-          <Button onClick={this.changeSource('sintelTrailer')} className="mr-3">
-            Sintel teaser
-          </Button>
-          <Button onClick={this.changeSource('bunnyTrailer')} className="mr-3">
-            Bunny trailer
-          </Button>
-          <Button onClick={this.changeSource('bunnyMovie')} className="mr-3">
-            Bunny movie
-          </Button>
-          <Button onClick={this.changeSource('test')} className="mr-3">
-            Test movie
-          </Button>
-        </div>
-        */}
     </div>
   );
 }

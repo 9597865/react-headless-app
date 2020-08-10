@@ -114,14 +114,20 @@ const setup = (ctx) => {
     ctx.setState(videoData);
   };
 
+
+  const inputVideoUrlOnChange = (value) => {
+    //console.log('inputVideoUrlOnChange');
+  };
+
   const textareaOnChange = (data) => {
-    console.log(data);
+    //console.log(data);
   };
 
   return {
     fetch,
     setRateVideoData,
     textareaOnChange,
+    inputVideoUrlOnChange
   };
 };
 
@@ -131,7 +137,6 @@ const WebRateVideoBox = React.memo((props) => {
     module: MODEL_NAME,
     setup,
     state: iState,
-    settings: { },
   };
 
   const ctx = useConcent(ops);
@@ -146,6 +151,7 @@ const WebRateVideoBox = React.memo((props) => {
     settings: {
       setRateVideoData,
       textareaOnChange,
+      inputVideoUrlOnChange,
     },
     moduleComputed: mcu,
     moduleReducer: mrd,
@@ -178,9 +184,6 @@ const WebRateVideoBox = React.memo((props) => {
     ref.isPause() ? setPlayTitle('暂停') : setPlayTitle('开始播放');
   };
 
-  const inputChange = (value) => {
-    console.log('inputChange');
-  };
 
   return (
     <>
@@ -199,7 +202,7 @@ const WebRateVideoBox = React.memo((props) => {
         <Wrapper key={ Math.random() }>
           <Wrapper>
             <Title level={4}>视频地址:</Title>
-            <Input ref={$refInputVideoUrl} defaultValue={videoUrl} allowClear onChange={inputChange}/>
+            <Input ref={$refInputVideoUrl} defaultValue={videoUrl} allowClear onChange={inputVideoUrlOnChange}/>
           </Wrapper>
           <Wrapper>
             <Title level={4}>变速时间点:</Title>
