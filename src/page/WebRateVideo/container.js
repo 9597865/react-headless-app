@@ -16,11 +16,12 @@ import {
 
 import styled from 'styled-components';
 import { useConcent, emit } from 'concent';
-import { MODEL_NAME } from './_model/index';
+import { MODEL_NAME, KEY_VIDEO } from './_model/index';
 import marked from 'marked';
 import hljs from 'highlight.js';
 import loadjs from 'loadjs';
 import WebRateVideo from '../comp/picshow/WebRateVideo';
+import localStorage from 'localStorage';
 
 const { TextArea } = Input;
 const { Title, Paragraph, Text } = Typography;
@@ -41,35 +42,6 @@ const WrapperImg = styled.div`
 loadjs(['./css/monokai_sublime.min.css'], 'web2canvas', {
   async: false,
 });
-
-const setup = (ctx) => {
-  const { fetch } = ctx.moduleReducer;
-
-  ctx.effect(() => {
-  }, []);
-
-
-  const setRateVideoData = ($refWebRateVideo, $refTaVideoUrl) => {
-    try {
-      const inputVideoValue = $refWebRateVideo.current.state.value;
-      const taValue = JSON.parse($refTaVideoUrl.current.state.value);
-      ctx.setState({ videoUrl: inputVideoValue, timeRate: taValue });
-      message.success('装载数据成功');
-    } catch (error) {
-      message.error('JSON 数据结构解释失败');
-    }
-  };
-
-  const textareaOnChange = (data) => {
-    console.log(data);
-  };
-
-  return {
-    fetch,
-    setRateVideoData,
-    textareaOnChange,
-  };
-};
 
 const iState = {
   // videoUrl: 'http://video.cross.webdev.com/h5/dist/jzvideo.mp4',
@@ -104,12 +76,63 @@ const iState = {
   playTitle: '开始播放',
 };
 
+
+const setup = (ctx) => {
+  const { fetch } = ctx.moduleReducer;
+
+  ctx.effect(() => {
+    // localStorage.clear();
+    const keyVideoData = localStorage.getItem(KEY_VIDEO);
+    if (keyVideoData !== null) {
+      // console.log('=====localStorage====');
+      settingData(JSON.parse(keyVideoData));
+    } else {
+      console.log('无本地存储数据, 加载默认数据');
+    }
+  }, []);
+
+
+  const setRateVideoData = ($refWebRateVideo, $refTaVideoUrl) => {
+    try {
+      const inputVideoValue = $refWebRateVideo.current.state.value;
+      const taValue = JSON.parse($refTaVideoUrl.current.state.value);
+      const videoData = { videoUrl: inputVideoValue, timeRate: taValue };
+      settingData(videoData);
+      setStorage(KEY_VIDEO, videoData);
+
+      message.success('装载数据成功');
+    } catch (error) {
+      message.error('JSON 数据结构解释失败');
+    }
+  };
+
+  const setStorage = (key, data) => {
+    localStorage.setItem(key, JSON.stringify(data));
+  };
+
+  const settingData = (videoData) => {
+    ctx.setState(videoData);
+  };
+
+  const textareaOnChange = (data) => {
+    console.log(data);
+  };
+
+  return {
+    fetch,
+    setRateVideoData,
+    textareaOnChange,
+  };
+};
+
+
 const WebRateVideoBox = React.memo((props) => {
   const ops = {
     props,
     module: MODEL_NAME,
     setup,
     state: iState,
+    settings: { },
   };
 
   const ctx = useConcent(ops);
@@ -156,6 +179,9 @@ const WebRateVideoBox = React.memo((props) => {
     ref.isPause() ? setPlayTitle('暂停') : setPlayTitle('开始播放');
   };
 
+  const inputChange = (value) => {
+    console.log('inputChange');
+  };
 
   return (
     <>
@@ -171,19 +197,21 @@ const WebRateVideoBox = React.memo((props) => {
           timeRate={timeRate}
           width={videoWidth}
           height={videoHeight} />
-        <Wrapper>
-          <Title level={4}>视频地址:</Title>
-          <Input ref={$refInputVideoUrl} defaultValue={videoUrl} />
-        </Wrapper>
-        <Wrapper>
-          <Title level={4}>变速时间点:</Title>
-          <TextArea
-            defaultValue={JSON.stringify(timeRate)}
-            ref={$refTaVideoUrl}
-            onChange={textareaOnChange}
-            placeholder=""
-            autoSize={{ minRows: 3, maxRows: 5 }}
-          />
+        <Wrapper key={ Math.random() }>
+          <Wrapper>
+            <Title level={4}>视频地址:</Title>
+            <Input ref={$refInputVideoUrl} defaultValue={videoUrl} allowClear onChange={inputChange}/>
+          </Wrapper>
+          <Wrapper>
+            <Title level={4}>变速时间点:</Title>
+            <TextArea
+              defaultValue={JSON.stringify(timeRate)}
+              ref={$refTaVideoUrl}
+              onChange={textareaOnChange}
+              placeholder=""
+              autoSize={{ minRows: 3, maxRows: 5 }}
+            />
+          </Wrapper>
         </Wrapper>
         <Wrapper>
           <Button

@@ -1,14 +1,14 @@
-import React, { useState, useImperativeHandler, Component } from "react";
+import React, { useState, useImperativeHandler, Component } from 'react';
 // import { register, useConcent } from 'concent';
-import { Button, Typography } from "antd";
-import styled from "styled-components";
+import { Button, Typography } from 'antd';
+import styled from 'styled-components';
 
 /** player documemt */
 // https://video-react.js.org/components/player/
-import "video-react/dist/video-react.css";
-import { Player, ControlBar, BigPlayButton } from "video-react";
-import LRC from "lrc.js";
-import moment from "moment";
+import 'video-react/dist/video-react.css';
+import { Player, ControlBar, BigPlayButton } from 'video-react';
+import LRC from 'lrc.js';
+import moment from 'moment';
 
 const Wrapper = styled.div`
   margin-bottom: 16px;
@@ -19,10 +19,10 @@ const WrapperSpan = styled.span`
 `;
 
 const sources = {
-  sintelTrailer: "http://media.w3.org/2010/05/sintel/trailer.mp4",
-  bunnyTrailer: "http://media.w3.org/2010/05/bunny/trailer.mp4",
-  bunnyMovie: "http://media.w3.org/2010/05/bunny/movie.mp4",
-  test: "http://media.w3.org/2010/05/video/movie_300.webm",
+  sintelTrailer: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
+  bunnyTrailer: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
+  bunnyMovie: 'http://media.w3.org/2010/05/bunny/movie.mp4',
+  test: 'http://media.w3.org/2010/05/video/movie_300.webm',
 };
 
 // @register()
@@ -58,13 +58,13 @@ class WebRateVideo extends React.Component {
 
   getLyrics = () => {
     const lyr = this.state.timeRate;
-    const lyrList = lyr.map((item) => `[${item.t}]${item.r}`);
-    const lyrString = lyrList.join("\r\n");
+    const lyrList = lyr.map(item => `[${item.t}]${item.r}`);
+    const lyrString = lyrList.join('\r\n');
     const lyrics = LRC.parse(lyrString);
     return lyrics;
   };
 
-  getRate = (currentTime) => this.lyrics.currentLine(currentTime);
+  getRate = currentTime => this.lyrics.currentLine(currentTime);
 
   createInit() {
     this.lyrics = this.getLyrics();
@@ -74,9 +74,6 @@ class WebRateVideo extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log("====componentDidMount====videoUrl======");
-    console.log(this.props);
-    // subscribe state change
     this.createInit();
   };
 
@@ -108,7 +105,7 @@ class WebRateVideo extends React.Component {
   //   return false;
   // }
 
-  setMuted = (muted) => () => {
+  setMuted = muted => () => {
     this.player.muted = muted;
   };
 
@@ -153,27 +150,27 @@ class WebRateVideo extends React.Component {
     this.player.load();
   };
 
-  changeCurrentTime = (seconds) => () => {
+  changeCurrentTime = seconds => () => {
     const { player } = this.player.getState();
     this.player.seek(player.currentTime + seconds);
   };
 
-  seek = (seconds) => () => {
+  seek = seconds => () => {
     this.player.seek(seconds);
   };
 
-  changePlaybackRateRate = (steps) => () => {
+  changePlaybackRateRate = steps => () => {
     const { player } = this.player.getState();
     this.player.playbackRate = player.playbackRate + steps;
   };
 
-  changeVolume = (steps) => () => {
+  changeVolume = steps => () => {
     const { player } = this.player.getState();
     this.player.volume = player.volume + steps;
   };
 
-  changeSource = (name) => () => {
-    if (name === "jiaozhen") {
+  changeSource = name => () => {
+    if (name === 'jiaozhen') {
       this.setState({
         source: this.state.videoUrl,
       });
@@ -207,7 +204,7 @@ class WebRateVideo extends React.Component {
       <Wrapper style={{ fontSize: 25 }}>
         <WrapperSpan>
           播放时间:
-          {moment(this.state.currentTime * 1000).format("mm:ss.SSS")}
+          {moment(this.state.currentTime * 1000).format('mm:ss.SSS')}
         </WrapperSpan>
         <WrapperSpan>倍速:x{this.state.playbackRate}</WrapperSpan>
       </Wrapper>
