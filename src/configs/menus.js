@@ -8,6 +8,7 @@ import {
   CameraOutlined,
   PictureOutlined,
   VideoCameraOutlined,
+  InstagramOutlined,
 } from '@ant-design/icons';
 export default [
   {
@@ -24,5 +25,10 @@ export default [
     icon: <VideoCameraOutlined />,
     name: '变速播放器-beta',
     path: '/ratevideo',
+  },
+  {
+    icon: <InstagramOutlined />,
+    name: '热力图播放器',
+    path: '/chartvideoplayer',
   },
 ];

@@ -7,9 +7,15 @@ import "video-react/dist/video-react.css";
 import { Player, ControlBar, BigPlayButton } from "video-react";
 import LRC from "lrc.js";
 import moment from "moment";
+import * as d3 from "d3";
 
 const Wrapper = styled.div`
   margin-bottom: 16px;
+`;
+
+const WrapperChart = styled.div`
+  height: 50px;
+  background-color: rgb(135, 135, 135, 0.4);
 `;
 
 const WrapperSpan = styled.span`
@@ -20,14 +26,7 @@ const TxtBox = styled.span`
   color: red;
 `;
 
-// @register()
-class WebRateVideo extends React.Component {
-  // $$setup(ctx) {
-  //   ctx.on('someEvent', (name) => {
-  //     console.log('trigger nameChanged flag1 callback');
-  //   });
-  // }
-
+class WebChartVideo extends React.Component {
   constructor(props, context) {
     super(props, context);
     const { videoUrl, timeRate, width, height } = props;
@@ -37,10 +36,9 @@ class WebRateVideo extends React.Component {
       videoWidth: width,
       videoHeight: height,
       paused: true,
+      chartConfig: {},
     };
-
     this.lyrics = {};
-
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.load = this.load.bind(this);
@@ -49,6 +47,39 @@ class WebRateVideo extends React.Component {
     this.changePlaybackRateRate = this.changePlaybackRateRate.bind(this);
     this.changeVolume = this.changeVolume.bind(this);
     this.setMuted = this.setMuted.bind(this);
+  }
+
+  drawChart() {
+    // https://www.jianshu.com/p/fdd77fc22c09
+    // const svg = d3
+    //   .select("#drawSVG")
+    //   .append("svg")
+    //   .attr("width", 700)
+    //   .attr("height", 300);
+    // svg.selectAll("rect").data(data).enter().append("rect");
+
+    const data = [12, 5, 6, 6, 9, 10];
+    const w = 300;
+    const h = 50;
+
+    const svg = d3.select("#drawSVG")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .style("margin-left", 100);
+
+    svg.selectAll("rect")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => i * 80)
+      .attr("y", (d, i) => h - 5 * d)
+      .attr("width", 6)
+      .attr("height", (d, i) => d * 10)
+      .attr("fill", "green");
+
+    console.log('-------drawChart()---------');
+
   }
 
   getLyrics = () => {
@@ -62,6 +93,7 @@ class WebRateVideo extends React.Component {
   getRate = (currentTime) => this.lyrics.currentLine(currentTime);
 
   createInit() {
+
     this.lyrics = this.getLyrics();
     this.player.subscribeToStateChange(this.handleStateChange.bind(this));
 
@@ -69,6 +101,7 @@ class WebRateVideo extends React.Component {
   }
 
   componentDidMount = () => {
+    this.drawChart();
     this.createInit();
   };
 
@@ -127,7 +160,6 @@ class WebRateVideo extends React.Component {
    */
   setUpdateRate = (currentRate) => {
     this.player.playbackRate = currentRate;
-    this.player.muted = currentRate!=='1'?true:false;
     this.forceUpdate();
   };
 
@@ -189,6 +221,9 @@ class WebRateVideo extends React.Component {
           <source src={this.state.videoUrl} />
           <ControlBar autoHide={false} />
         </Player>
+        <WrapperChart style={{ width: this.state.videoWidth, height: 50 }}>
+          <div id="drawSVG">qiter</div>
+        </WrapperChart>
       </Wrapper>
       <Wrapper style={{ fontSize: 25 }}>
         <WrapperSpan>
@@ -202,4 +237,4 @@ class WebRateVideo extends React.Component {
     </div>
   );
 }
-export default WebRateVideo;
+export default WebChartVideo;

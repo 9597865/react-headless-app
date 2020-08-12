@@ -1,5 +1,5 @@
 const level = process.env.NODE_ENV === "production" ? 2 : 1;
-
+//"@tencent/eslint-config-tencent"
 module.exports = {
   root: true,
   env: {
@@ -7,7 +7,7 @@ module.exports = {
     es6: true,
     node: true,
   },
-  extends: ["plugin:react/recommended", "@tencent/eslint-config-tencent"],
+  extends: ["plugin:react/recommended"],
   parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {

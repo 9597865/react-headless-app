@@ -21,6 +21,13 @@ const routes = [
     exact: true,
     component: loadable(() => import('../page/WebRateVideo')),
   },
+  {
+    path: '/chartvideoplayer',
+    exact: true,
+    component: loadable(() => import('../page/WebChartVideoPlayer')),
+  },
+
+
 ];
 
 // routes.push({
