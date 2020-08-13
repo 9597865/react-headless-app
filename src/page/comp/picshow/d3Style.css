@@ -1,0 +1,10 @@
+#d3Container {
+  border-top: 1px solid #333;
+  background-color: #000;
+}
+
+#d3Container path {
+  fill: none;
+  stroke: rgb(175, 223, 255, 0.5);
+  stroke-width: 1;
+}

@@ -127,7 +127,7 @@ class WebRateVideo extends React.Component {
    */
   setUpdateRate = (currentRate) => {
     this.player.playbackRate = currentRate;
-    this.player.muted = currentRate!=='1'?true:false;
+    this.player.muted = (currentRate !== '1') ? true : false ;
     this.forceUpdate();
   };
 

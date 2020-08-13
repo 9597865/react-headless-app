@@ -9,13 +9,15 @@ import LRC from "lrc.js";
 import moment from "moment";
 import * as d3 from "d3";
 
+import './d3Style.css';
+
 const Wrapper = styled.div`
   margin-bottom: 16px;
 `;
 
 const WrapperChart = styled.div`
   height: 50px;
-  background-color: rgb(135, 135, 135, 0.4);
+  background-color: #000;
 `;
 
 const WrapperSpan = styled.span`
@@ -49,37 +51,83 @@ class WebChartVideo extends React.Component {
     this.setMuted = this.setMuted.bind(this);
   }
 
-  drawChart() {
-    // https://www.jianshu.com/p/fdd77fc22c09
-    // const svg = d3
-    //   .select("#drawSVG")
-    //   .append("svg")
-    //   .attr("width", 700)
-    //   .attr("height", 300);
-    // svg.selectAll("rect").data(data).enter().append("rect");
+  drawChart = () => {
+    // console.log(this.state.timeRate);
+    // const s = this.makeDurationToSeconds('01:00:01.456');
+    // console.log(s);
 
-    const data = [12, 5, 6, 6, 9, 10];
-    const w = 300;
+    const { timeRate: rateData } = this.state;
+    const data = rateData.map((item, index) => {
+      const { t, r } = item;
+      const newTimeToSecond = this.makeDurationToSeconds(t);
+      // console.log(t + '--->' + newTimeToSecond);
+      console.log(`${t}---${newTimeToSecond}`);
+      return newTimeToSecond * r;
+    });
+
+    // const data = [10, 30, 50, 70, 80, 40, 30, 70];
+    const w = this.state.videoWidth;
     const h = 50;
 
-    const svg = d3.select("#drawSVG")
+    const margin = { left: 0, top: 0, right: 0, bottom: 0 };
+    const svg = d3.select("#d3Container")
       .append("svg")
       .attr("width", w)
-      .attr("height", h)
-      .style("margin-left", 100);
+      .attr("height", h);
+    const g = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+    // Scale
+    const scaleX = d3.scaleLinear()
+      .domain([0, data.length - 1])
+      .range([0, w]);
+    const scaleY = d3.scaleLinear()
+      .domain([0, d3.max(data)])
+      .range([h, 0]);
+    // 画线函数
+    const lineGenerator = d3.line()
+      .x((d, i) => {
+        return scaleX(i);
+      })
+      .y((d) => {
+        return scaleY(d);
+      })
+      .curve(d3.curveMonotoneX); // apply smoothing to the line
+    // 画路径
+    g.append("path")
+      .attr("d", lineGenerator(data)); // d="M1,0L20,40.....  d-path data
 
-    svg.selectAll("rect")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * 80)
-      .attr("y", (d, i) => h - 5 * d)
-      .attr("width", 6)
-      .attr("height", (d, i) => d * 10)
-      .attr("fill", "green");
+    // 画面积函数
+    const areaGenerator = d3.area()
+      .x(function (d, i) {
+        return scaleX(i);
+      })
+      .y0(h)
+      .y1(function (d) {
+        return scaleY(d);
+      })
+      .curve(d3.curveMonotoneX);
 
-    console.log('-------drawChart()---------');
+    // 画面积
+    g.append("path")
+      .attr("d", areaGenerator(data)) // d="M1,0L20,40.....  d-path data
+      .style("fill", "steelblue");
 
+    // // X轴
+    // g.append("g")
+    //   .call(d3.axisBottom(scaleX))
+    //   .attr("transform", `translate(0, ${h})`);
+
+    // // Y轴
+    // g.append("g")
+    //   .call(d3.axisLeft(scaleY));
+
+    // y轴文字
+    // g.append("text")
+    //   .text("Price($)")
+    //   .attr("transform", "rotate(-90)")
+    //   .attr("dy", "1em")
+    //   .attr("text-anchor", "end");
   }
 
   getLyrics = () => {
@@ -90,10 +138,19 @@ class WebChartVideo extends React.Component {
     return lyrics;
   };
 
+  makeDurationToSeconds = (time) => {
+    const str = time;
+    const arr = str.split(':');
+    const hs = parseInt(arr[0] * 3600);
+    const ms = parseInt(arr[1] * 60);
+    const ss = parseInt(arr[2]);
+    const seconds = hs + ms + ss;
+    return seconds;
+  }
+
   getRate = (currentTime) => this.lyrics.currentLine(currentTime);
 
-  createInit() {
-
+  createInit = () => {
     this.lyrics = this.getLyrics();
     this.player.subscribeToStateChange(this.handleStateChange.bind(this));
 
@@ -144,7 +201,7 @@ class WebChartVideo extends React.Component {
       try {
         const { text: rate } = this.getRate(currentTime);
         currentRate = rate;
-      } catch (error) {}
+      } catch (error) { }
       this.setUpdateRate(currentRate);
     }
     this.setState({
@@ -215,14 +272,13 @@ class WebChartVideo extends React.Component {
           ref={(player) => {
             this.player = player;
           }}
-          // autoPlay
+        // autoPlay
         >
           <BigPlayButton position="center" />
           <source src={this.state.videoUrl} />
           <ControlBar autoHide={false} />
         </Player>
-        <WrapperChart style={{ width: this.state.videoWidth, height: 50 }}>
-          <div id="drawSVG">qiter</div>
+        <WrapperChart id="d3Container" style={{ width: this.state.videoWidth }}>
         </WrapperChart>
       </Wrapper>
       <Wrapper style={{ fontSize: 25 }}>
