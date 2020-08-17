@@ -1,10 +1,10 @@
-#d3Container {
+#chartVideoContainer {
   border-top: 1px solid #333;
   background-color: #000;
 }
 
-#d3Container path {
+#chartVideoContainer path {
   fill: none;
-  stroke: rgb(175, 223, 255, 0.5);
+  stroke: rgb(175, 183, 255);
   stroke-width: 1;
 }

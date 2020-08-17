@@ -57,61 +57,119 @@ class WebChartVideo extends React.Component {
     // console.log(s);
 
     const { timeRate: rateData } = this.state;
-    const data = rateData.map((item, index) => {
-      const { t, r } = item;
-      const newTimeToSecond = this.makeDurationToSeconds(t);
-      // console.log(t + '--->' + newTimeToSecond);
-      console.log(`${t}---${newTimeToSecond}`);
-      return newTimeToSecond * r;
+    const tempData = rateData.map((item) => {
+      const { t: timeRateValue } = item;
+      const newTimeToSecond = this.makeDurationToSeconds(timeRateValue);
+      return newTimeToSecond;
     });
 
-    // const data = [10, 30, 50, 70, 80, 40, 30, 70];
-    const w = this.state.videoWidth;
-    const h = 50;
+    let tempNum = 0;
+    const degreData = _.map(tempData, (value) => {
+      const n = value - tempNum;
+      tempNum = value;
+      return n < 0 ? 0 : n;
+    });
+
+
+    // 求平均值
+    const mean = _.meanBy(degreData);
+    const maxNum = _.max(degreData);
+    const minNum = _.min(degreData);
+    const sumNum = _.sum(degreData);
+
+    const data = _.map(tempData, (value) => {
+      const n = value - tempNum;
+      const val = n < 0 ? 0 : n;
+      tempNum = value;
+      const percent = Math.round((val / maxNum) * 100);
+      const spanNum = 30;
+      let resultVal = 0;
+      if (percent > spanNum) {
+        resultVal = percent - spanNum;
+      } else {
+        resultVal = percent + spanNum;
+      }
+
+      return resultVal;
+    });
+
+    console.log(maxNum);
+    console.log(minNum);
+    console.log(sumNum);
+    console.log(data);
+
+
+
+    const chartWidth = this.state.videoWidth;
+    const chartHeight = 50;
 
     const margin = { left: 0, top: 0, right: 0, bottom: 0 };
-    const svg = d3.select("#d3Container")
+    const svg = d3.select("#chartVideoContainer")
       .append("svg")
-      .attr("width", w)
-      .attr("height", h);
+      .attr("width", chartWidth)
+      .attr("height", chartHeight);
+
     const g = svg
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
+
     // Scale
     const scaleX = d3.scaleLinear()
       .domain([0, data.length - 1])
-      .range([0, w]);
+      .range([0, chartWidth]);
     const scaleY = d3.scaleLinear()
       .domain([0, d3.max(data)])
-      .range([h, 0]);
+      .range([chartHeight, 0]);
     // 画线函数
     const lineGenerator = d3.line()
-      .x((d, i) => {
-        return scaleX(i);
-      })
-      .y((d) => {
-        return scaleY(d);
-      })
-      .curve(d3.curveMonotoneX); // apply smoothing to the line
+      .x((d, i) => scaleX(i))
+      .y((d) => scaleY(d))
+      .curve(d3.curveMonotoneX);
     // 画路径
     g.append("path")
-      .attr("d", lineGenerator(data)); // d="M1,0L20,40.....  d-path data
+      .attr("d", lineGenerator(data));
 
     // 画面积函数
     const areaGenerator = d3.area()
-      .x(function (d, i) {
-        return scaleX(i);
-      })
-      .y0(h)
-      .y1(function (d) {
-        return scaleY(d);
-      })
+      .x((d, i) => scaleX(i))
+      .y0(chartHeight)
+      .y1((d) => scaleY(d))
       .curve(d3.curveMonotoneX);
 
+    const colorScale = d3.scaleLinear()
+      .domain([0, 150])
+      .range([0, 1]);
     // 画面积
     g.append("path")
-      .attr("d", areaGenerator(data)) // d="M1,0L20,40.....  d-path data
-      .style("fill", "steelblue");
+      .attr("d", areaGenerator(data))
+      .style("fill", "rgba(132, 144, 255, 0.5)")
+      .on("mouseover", (d, i) => {
+      }).on("mouseout", (d, i) => {
+      });
+
+    const dataset = [5];
+    const circles = svg.selectAll("circle")
+      .data(dataset)
+      .enter()
+      .append("circle");
+
+    circles.attr("cx", (d, i) => (i * 5) + 10)
+      .attr("cy", chartHeight)
+      .attr("r", (d) => d)
+      .style("fill", "rgba(255, 244, 255, 0.8)");
+
+    svg.on("mousemove", (d, i) => {
+      const { offsetX, offsetY } = d3.event;
+      const totalLen = data.length;
+      const mousePercentX = offsetX / chartWidth;
+      const index = Math.round(totalLen * mousePercentX);
+      const posY = scaleY(data[index]);
+      circles.attr("cx", offsetX).attr("cy", posY);
+    });
+
+    svg.on("mousedown", () => {
+      // console.log(d3.event);
+    });
 
     // // X轴
     // g.append("g")
@@ -147,7 +205,17 @@ class WebChartVideo extends React.Component {
     const seconds = hs + ms + ss;
     return seconds;
   }
-
+  /*
+  makeDurationToSeconds = (time) => {
+    const str = time;
+    const arr = str.split(':');
+    const hs = parseInt(arr[0] * 3600);
+    const ms = parseInt(arr[1] * 60);
+    const ss = parseInt(arr[2]);
+    const seconds = hs + ms + ss;
+    return seconds;
+  }
+  */
   getRate = (currentTime) => this.lyrics.currentLine(currentTime);
 
   createInit = () => {
@@ -278,7 +346,7 @@ class WebChartVideo extends React.Component {
           <source src={this.state.videoUrl} />
           <ControlBar autoHide={false} />
         </Player>
-        <WrapperChart id="d3Container" style={{ width: this.state.videoWidth }}>
+        <WrapperChart id="chartVideoContainer" style={{ width: this.state.videoWidth }}>
         </WrapperChart>
       </Wrapper>
       <Wrapper style={{ fontSize: 25 }}>

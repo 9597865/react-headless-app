@@ -5,7 +5,8 @@ import {
   Button,
   Divider,
   Input,
-  Select } from 'antd';
+  Select
+} from 'antd';
 
 import {
   PlayCircleOutlined,
@@ -162,16 +163,16 @@ const setup = (ctx) => {
       const jsonObj = JSON.parse(keyVideoData);
       const { timeRate } = jsonObj;
       const newJsonTimeRate = createNewTimeRate(timeRate);
-      settingData({...jsonObj, timeRate: newJsonTimeRate});
+      settingData({ ...jsonObj, timeRate: newJsonTimeRate });
     } else {
       console.log('无本地存储数据, 加载默认数据');
       const timeRateObj = createNewTimeRate(ctx.state.timeRate);
-      ctx.setState({timeRate: timeRateObj});
+      ctx.setState({ timeRate: timeRateObj });
     }
   }, []);
 
   const createNewTimeRate = (timeRate) => {
-    const timeRateObj = timeRate.map((item, index)=>{
+    const timeRateObj = timeRate.map((item, index) => {
       const { t } = item;
       item.t = parseTime(t);
       return item;
@@ -190,10 +191,10 @@ const setup = (ctx) => {
     const leaveStr = timeStr.substring(pos + 1, strLen);
     const pos2 = leaveStr.indexOf(':');
     const miniValueStr = leaveStr.substring(0, pos2);
-    const totalMiniValue = totalHourToMinite +  Number(miniValueStr);
+    const totalMiniValue = totalHourToMinite + Number(miniValueStr);
     //
     const lastPos = timeStr.lastIndexOf(":");
-    const timeSecondStr =  timeStr.substring(lastPos, strLen);
+    const timeSecondStr = timeStr.substring(lastPos, strLen);
     const resultTime = `${totalMiniValue}${timeSecondStr}`;
     // const resultStr = totalMiniValue.length===1 ? `${resultTime}`:`${resultTime}`;
     // console.log(resultStr);
@@ -307,10 +308,10 @@ const WebRateVideoBox = React.memo((props) => {
           timeRate={timeRate}
           width={videoWidth}
           height={videoHeight} />
-        <Wrapper key={ Math.random() }>
+        <Wrapper key={Math.random()}>
           <Wrapper>
             <Title level={4}>视频地址:</Title>
-            <Input ref={$refInputVideoUrl} defaultValue={videoUrl} allowClear onChange={inputVideoUrlOnChange}/>
+            <Input ref={$refInputVideoUrl} defaultValue={videoUrl} allowClear onChange={inputVideoUrlOnChange} />
           </Wrapper>
           <Wrapper>
             <Title level={4}>变速时间点:</Title>

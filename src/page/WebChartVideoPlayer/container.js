@@ -152,7 +152,7 @@ const WebChartVideoBox = React.memo((props) => {
         width={videoWidth}
         height={videoHeight}
       />
-      <Wrapper>
+      {/* <Wrapper>
         <Button
           icon={<InstagramOutlined />}
           type="primary"
@@ -164,7 +164,7 @@ const WebChartVideoBox = React.memo((props) => {
         >
           开始-网页转视频
         </Button>
-      </Wrapper>
+      </Wrapper> */}
     </>
   );
 });
