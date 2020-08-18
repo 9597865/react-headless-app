@@ -188,6 +188,85 @@ class WebChartVideo extends React.Component {
     //   .attr("text-anchor", "end");
   }
 
+  drawChartBar = () => {
+    // 画布大小
+    const width = 800;
+    const height = 400;
+
+    // 在 body 里添加一个 SVG 画布    
+    const svg = d3.select("#chartBarContainer")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    // 画布周边的空白
+    const padding = { left: 50, right: 30, top: 20, bottom: 20 };
+    const barWidth = 100;
+
+    // 原始数据
+    const datax = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    let datay = [];
+    for (let i = 1;i <= 7;i++) {
+      datay.push(barWidth * i);
+    }
+    console.log(datay);
+
+    // x轴
+    const xScale = d3.scaleOrdinal()
+      .domain(datax)
+      .range(datay);
+
+    const xAxis = d3.axisBottom()
+      .scale(xScale);
+
+    const translateY = height - padding.bottom;
+
+    svg.append('g')
+      .call(xAxis)
+      .attr("transform", `translate(${0}, ${translateY})`)
+      .selectAll("text")
+      .attr("dx", barWidth / 2);
+
+    // y轴 
+    const yScale = d3.scaleLinear()
+      .domain([0, d3.max(datay)])
+      .range([height - padding.bottom, padding.top]);
+
+    const yAxis = d3.axisLeft()
+      .scale(yScale)
+      .ticks(10);
+
+    svg.append('g')
+      .call(yAxis)
+      .attr("transform", `translate(${barWidth},0)`);
+
+    const bar = svg.selectAll(".bar")
+      .data([100, 200, 300, 700, 500, 600, 400])
+      .enter().append("g")
+      .attr("class", "bar")
+      .attr("transform", (d, i) => {
+        // return `translate(${xScale(i * barWidth)}, ${yScale(d)})`;
+        return `translate(${(i + 1) * (barWidth)}, ${yScale(d)})`;
+      });
+
+    const rect = bar.append("rect")
+      .attr("x", 1)
+      .attr("width", barWidth)
+      .attr("height", (d) => { return height - yScale(d) - padding.bottom; })
+      .attr("stroke", "White")
+      .attr("fill", "#f63").on('click', () => {
+        rect.attr("fill", "#ccc");
+      });
+
+    bar.append("text")
+      .attr("dy", ".75em")
+      .attr("y", 6)
+      .attr("x", barWidth / 2)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "18px")
+      .text((d) => d);
+  }
+
   getLyrics = () => {
     const lyr = this.state.timeRate;
     const lyrList = lyr.map((item) => `[${item.t}]${item.r}`);
@@ -226,6 +305,7 @@ class WebChartVideo extends React.Component {
   }
 
   componentDidMount = () => {
+    this.drawChartBar();
     this.drawChart();
     this.createInit();
   };
@@ -331,6 +411,9 @@ class WebChartVideo extends React.Component {
   render = () => (
     <div>
       <Wrapper>
+        <div id='chartBarContainer'>
+          <div className={'bar'}></div>
+        </div>
         <Player
           fluid={false}
           width={this.state.videoWidth}
@@ -342,11 +425,11 @@ class WebChartVideo extends React.Component {
           }}
         // autoPlay
         >
-          <BigPlayButton position="center" />
+          <BigPlayButton position='center' />
           <source src={this.state.videoUrl} />
           <ControlBar autoHide={false} />
         </Player>
-        <WrapperChart id="chartVideoContainer" style={{ width: this.state.videoWidth }}>
+        <WrapperChart id='chartVideoContainer' style={{ width: this.state.videoWidth }}>
         </WrapperChart>
       </Wrapper>
       <Wrapper style={{ fontSize: 25 }}>
