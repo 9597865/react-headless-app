@@ -26,6 +26,11 @@ const routes = [
     exact: true,
     component: loadable(() => import('../page/WebChartVideoPlayer')),
   },
+  {
+    path: '/webd3chart',
+    exact: true,
+    component: loadable(() => import('../page/WebD3Chart')),
+  },
 
 
 ];

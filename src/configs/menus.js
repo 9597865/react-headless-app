@@ -31,4 +31,9 @@ export default [
     name: '热力图播放器',
     path: '/chartvideoplayer',
   },
+  {
+    icon: <InstagramOutlined />,
+    name: '热力图播放器',
+    path: '/webd3chart',
+  },
 ];
