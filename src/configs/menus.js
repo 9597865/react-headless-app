@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import {
+  BarChartOutlined,
   CameraOutlined,
   PictureOutlined,
   VideoCameraOutlined,
@@ -32,8 +33,8 @@ export default [
     path: '/chartvideoplayer',
   },
   {
-    icon: <InstagramOutlined />,
-    name: '热力图播放器',
+    icon: <BarChartOutlined />,
+    name: '动态图表排行',
     path: '/webd3chart',
   },
 ];
