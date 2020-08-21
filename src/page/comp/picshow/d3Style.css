@@ -9,5 +9,44 @@
   stroke-width: 1;
 }
 
+#chartBarContainer .refline {
+  fill: none;
+  stroke: #2F4F4F;
+  stroke-width: 1.0px;
+  stroke-dasharray: 1, 15;
+}
 
-#chartBarContainer .bar {}
+
+#chartBarContainer_hor {
+  width: 640px;
+  height: 500px;
+  border: 1px solid #f63;
+}
+
+.axis path {
+  stroke: steelblue;
+  stroke-width: 1
+}
+
+.axis .tick line {
+  stroke: rgba(104, 104, 104, 0.5);
+  stroke-width: 3
+}
+
+#chartBarContainer .tick:first-child {
+  /* display: none */
+}
+
+#chartBarContainer .tick:nth-child(2) {
+  /* display: none */
+}
+
+#chartBarContainer path {
+  /* display: none */
+}
+
+#chartBarContainer .tick {
+  opacity: 0.5;
+  stroke: rgba(104, 104, 104, 0.5);
+  stroke-width: 0.5
+}
