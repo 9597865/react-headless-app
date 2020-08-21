@@ -221,21 +221,21 @@ class WebD3Chart extends React.Component {
 
       const getPosY = (i) => posY - (rectBox.height + rectBox.paddingTop) * (entiObj.length - i);
 
-      rects.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime)
+      rects.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("y", (_, i) => getPosY(i))
         .attr("transform", `translate(${rectBox.width}, 0)`)
         .attr("width", d => xScale(d.value));
 
-      labels.data(dataValue, d => d.name).text(d => d.name).transition().duration(animationDurationTime)
+      labels.data(dataValue, d => d.name).text(d => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("y", (_, i) => getPosY(i) + rectBox.height / 2);
 
-      totalLabels.data(dataValue, (d, i) => d.name).text(d => scientificToNumber(d.value)).transition().duration(animationDurationTime)
+      totalLabels.data(dataValue, (d, i) => d.name).text(d => scientificToNumber(d.value)).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("x", d => xScale(d.value) + rectBox.width + rectBox.paddingLeft)
         .attr("y", (_, i) => getPosY(i) + rectBox.height / 2);
 
-      iconImgs.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime)
+      iconImgs.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("xlink:href", d => d.iconUrl)
-        .attr("y", (_, i) => getPosY(i));
+        .attr("y", (_, i) => getPosY(i));;
 
     };
 
