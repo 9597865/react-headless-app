@@ -41,19 +41,24 @@ class WebD3Chart extends React.Component {
 
 
   drawChartBarHor = () => {
+
     const colors = ['#60acfc', '#32d3eb', '#5bc49f', '#feb64d', '#ff7c7c', '#9287e7'];
 
     const chartDatas = [
-      { time: '2008', 北京: 2100, 天津: 5866, 河北: 22986, 山西: 21506, 内蒙古: 34869, 辽宁: 31739 },
-      { time: '2009', 北京: 9600, 天津: 62574, 河北: 24581, 山西: 21522, 内蒙古: 39735, 辽宁: 35149 },
-      { time: '2010', 北京: 7390, 天津: 72994, 河北: 2008, 山西: 26283, 内蒙古: 4747, 辽宁: 42355 },
-      { time: '2011', 北京: 8580, 天津: 85213, 河北: 33969, 山西: 31357, 内蒙古: 57974, 辽宁: 50760 },
-      { time: '2012', 北京: 7475, 天津: 93173, 河北: 36584, 山西: 33628, 内蒙古: 6886, 辽宁: 6409 },
-      { time: '2013', 北京: 9468, 天津: 100105, 河北: 38909, 山西: 34984, 内蒙古: 67836, 辽宁: 56649 },
-      { time: '2014', 北京: 9995, 天津: 105231, 河北: 39984, 山西: 34984, 内蒙古: 71046, 辽宁: 61996 },
+      { time: '2008', 北京: 21000, 天津: 5866, 河北: 22986, 山西: 21506, 内蒙古: 34869, 辽宁: 31739 },
+      { time: '2009', 北京: 36000, 天津: 62574, 河北: 24581, 山西: 21522, 内蒙古: 39735, 辽宁: 35149 },
+      { time: '2010', 北京: 73900, 天津: 72994, 河北: 2008, 山西: 26283, 内蒙古: 4747, 辽宁: 42355 },
+      { time: '2011', 北京: 85800, 天津: 85213, 河北: 33969, 山西: 31357, 内蒙古: 57974, 辽宁: 50760 },
+      { time: '2012', 北京: 74750, 天津: 93173, 河北: 36584, 山西: 33628, 内蒙古: 6886, 辽宁: 6409 },
+      { time: '2013', 北京: 94680, 天津: 100105, 河北: 38909, 山西: 34984, 内蒙古: 67836, 辽宁: 56649 },
+      { time: '2014', 北京: 99950, 天津: 105231, 河北: 39984, 山西: 34984, 内蒙古: 71046, 辽宁: 61996 },
       { time: '2015', 北京: 160907, 天津: 107960, 河北: 40255, 山西: 35070, 内蒙古: 71101, 辽宁: 65201 },
       { time: '2016', 北京: 260907, 天津: 207960, 河北: 80255, 山西: 55070, 内蒙古: 31101, 辽宁: 25201 },
       { time: '2017', 北京: 300907, 天津: 192960, 河北: 90255, 山西: 25070, 内蒙古: 51101, 辽宁: 65201 },
+      { time: '2018', 北京: 320907, 天津: 202960, 河北: 94255, 山西: 26070, 内蒙古: 61101, 辽宁: 69201 },
+      { time: '2019', 北京: 330907, 天津: 212960, 河北: 95255, 山西: 28070, 内蒙古: 64101, 辽宁: 70201 },
+      { time: '2020', 北京: 1030907, 天津: 512960, 河北: 195255, 山西: 128070, 内蒙古: 164101, 辽宁: 90201 },
+
     ];
 
     const formatData = [
@@ -63,13 +68,13 @@ class WebD3Chart extends React.Component {
     let dataAllValues = [];
 
     const imgList = [
-      "http://cross.webdev.com/builder/assets/images/home/showcase/10.png",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/11.png",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/12.jpg",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/13.jpg",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/14.jpg",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/15.jpg",
-      "http://cross.webdev.com/builder/assets/images/home/showcase/16.jpg",
+      "assets/images/0.jpeg",
+      "assets/images/1.jpeg",
+      "assets/images/2.jpeg",
+      "assets/images/3.jpeg",
+      "assets/images/4.jpeg",
+      "assets/images/5.jpeg",
+      "assets/images/6.jpeg",
     ];
 
     const data = chartDatas.map((item, index) => {
@@ -94,6 +99,8 @@ class WebD3Chart extends React.Component {
     let spaceHeight = 200;
     const initWidth = 840;
     const initHeight = 500;
+    let durationTime = 1000;
+    let animationDurationTime = 500;
 
     const padding = { left: 40, top: 10, right: 20, bottom: 20, space: 20 };
 
@@ -107,6 +114,20 @@ class WebD3Chart extends React.Component {
     const rect = { height: 100, marginV: 10, marginH: 30, marginT: 80 };
     const font = { height: 20, margin: 80 };
 
+    let index = 0;
+    let dataEntry = data[index];
+    let entiObj = dataEntry["entities"];
+    let dataValue = entiObj.sort((x, y) => y.value - x.value);
+
+    const sortDataValueArr = dataAllValues.sort((a, b) => b - a);
+
+    const totalStep = chartDatas.length;
+
+    const scientificToNumber = (num) => {
+      const str = num.toString();
+      const reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+      return str.replace(reg, "$1,");
+    };
 
     const svg = d3.select(`#${this.state.chartDomId}`)
       .append("svg")
@@ -129,10 +150,12 @@ class WebD3Chart extends React.Component {
 
     // 添加x轴坐标轴
 
+
+
     // x轴比例尺
     let xScale = d3.scaleLinear()
-      .domain([0, d3.max(dataAllValues)])
-      .rangeRound([0, width - padding.left - padding.right]);
+      .domain([0, dataValue[0].value * 1.3])
+      .range([rectBox.width, width]);
 
     // 定义x轴
     let xAxis = d3.axisBottom(xScale);
@@ -141,18 +164,6 @@ class WebD3Chart extends React.Component {
     const posY = height - padding.top - padding.bottom - yPadding.bottom;
 
     // 添加
-    // gridlines in x axis function
-    const make_x_gridlines = () => {
-      return d3.axisBottom(xScale);
-    };
-
-
-    let durationTime = 1500;
-    let animationDurationTime = 700;
-    let index = 0;
-    let dataEntry = data[index];
-    let entiObj = dataEntry["entities"];
-    let dataValue = entiObj.sort((x, y) => y.value - x.value);
     let comment = svg.append("text").attr("x", width - 250).attr("y", posY - rectBox.paddingTop)
       .attr("fill", "grey").text(`${dataEntry.year}年`).style("font-size", "50");
 
@@ -170,29 +181,33 @@ class WebD3Chart extends React.Component {
       .attr("fill", (d, i) => colors[i % colors.length]);
 
     let labels = groups.append("text")
-      .attr("x", rectBox.width)
-      .style("font-size", `${font.height}px`);
+      .attr("class", "labels")
+      .attr("x", rectBox.paddingLeft + rectBox.width);
+    // .style("font-size", `${font.height}px`);
 
     let totalLabels = groups.append("text")
-      .attr("x", rectBox.width)
+      .attr("class", "totalLabels")
+      .attr("x", 0)
       .style("font-size", `${font.height}px`);
 
     let iconImgs = groups.append("svg:image")
       .attr("x", 0)
+      // .attr("style", "outline: thin solid #ccc;")
+      .attr("fill", "#ccc")
       .attr("width", rectBox.width)
       .attr("height", rectBox.height);
 
     // add the X gridlines
-    const grid = svg.append("g")
-      .attr("id", "grid")
+    let grid = svg.append("g")
+      .attr("class", "grid")
       .attr("transform", "translate(" + xPadding.left + "," + posY + ")")
-      .call(make_x_gridlines()
+      .call(xAxis
         .tickSize(-posY)
         .tickFormat("")
       );
     // 添加y轴
     let axisX = svg.append("g")
-      .attr("class", "axis")
+      .attr("class", "grid")
       .attr("transform", "translate(" + xPadding.left + "," + posY + ")")
       .call(xAxis);
 
@@ -211,37 +226,32 @@ class WebD3Chart extends React.Component {
       // .call(d3.axisBottom(xScale));
     };
 
-    const scientificToNumber = (num) => {
-      const str = num.toString();
-      const reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
-      return str.replace(reg, "$1,");
-    };
-
     const updateElements = () => {
 
       const getPosY = (i) => posY - (rectBox.height + rectBox.paddingTop) * (entiObj.length - i);
 
       rects.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
+        .attr("x", rectBox.width)
         .attr("y", (_, i) => getPosY(i))
-        .attr("transform", `translate(${rectBox.width}, 0)`)
-        .attr("width", d => xScale(d.value));
+        .attr("transform", `translate(0, 0)`)
+        .attr("width", d => xScale(d.value) - rectBox.width);
 
       labels.data(dataValue, d => d.name).text(d => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("y", (_, i) => getPosY(i) + rectBox.height / 2);
 
       totalLabels.data(dataValue, (d, i) => d.name).text(d => scientificToNumber(d.value)).transition().duration(animationDurationTime).ease(d3.easeLinear)
-        .attr("x", d => xScale(d.value) + rectBox.width + rectBox.paddingLeft)
+        .attr("x", d => xScale(d.value) + rectBox.paddingLeft)
         .attr("y", (_, i) => getPosY(i) + rectBox.height / 2);
 
       iconImgs.data(dataValue, (d, i) => d.name).transition().duration(animationDurationTime).ease(d3.easeLinear)
         .attr("xlink:href", d => d.iconUrl)
-        .attr("y", (_, i) => getPosY(i));;
+        .attr("y", (_, i) => getPosY(i));
 
     };
 
     // resize();
 
-    // updateElements();
+    updateElements();
 
     const update = (i) => {
 
@@ -250,6 +260,26 @@ class WebD3Chart extends React.Component {
 
       comment.text(`${dataEntry.year}年`);
 
+      // -----------------------------
+      xScale = d3.scaleLinear()
+        .domain([0, dataValue[0].value * 2])
+        .range([rectBox.width, width]);
+      xAxis = d3.axisBottom(xScale);
+      d3.selectAll('.axis').remove();
+      axisX = svg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + xPadding.left + "," + posY + ")")
+        .call(xAxis);
+      // -----------------------------
+      d3.selectAll('.grid').remove();
+      grid = svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(" + xPadding.left + "," + posY + ")")
+        .call(xAxis
+          .tickSize(-posY)
+          .tickFormat("")
+        );
+      // -----------------------------
       updateElements();
       // clearInterval(intervalId);
 
@@ -267,7 +297,6 @@ class WebD3Chart extends React.Component {
 
 
     let intervalId = setInterval(() => update(index), durationTime);
-
   }
 
   scientificToNumber = (num) => {
