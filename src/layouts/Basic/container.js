@@ -5,6 +5,7 @@ import { Switch, Route, Link, NavLink } from 'react-router-dom';
 import { ConfigProvider, Layout, Menu, Icon, Typography, Divider } from 'antd';
 
 import {
+  PieChartOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
@@ -52,7 +53,7 @@ class Container extends React.Component {
     super(props);
 
     this.state = {
-      collapsed: true,
+      collapsed: false,
       windowHeight: window.innerHeight,
       menuDefaultId: 0,
       selectedCurrnetKey: 0,
@@ -106,14 +107,15 @@ class Container extends React.Component {
           >
             <div className="logo" />
             <Menu
-              theme="dark"
               mode="inline"
+              theme="dark"
+              inlineCollapsed={this.state.collapsed}
               selectedKeys={[this.state.selectedCurrnetKey.toString()]}
               defaultSelectedKeys={[this.state.menuDefaultId.toString()]}
               onSelect={this.onSelect}
             >
               {menus.map(({ name, icon, path, children }, index) => (
-                <Menu.Item key={index} icon={icon}>
+                <Menu.Item key={index} icon={icon} title=''>
                   <Link to={path || getPath(children)}>
                     <span>{name}</span>
                   </Link>

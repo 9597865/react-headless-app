@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import {
+  PieChartOutlined,
   BarChartOutlined,
   CameraOutlined,
   PictureOutlined,
