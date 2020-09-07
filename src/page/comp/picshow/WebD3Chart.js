@@ -30,8 +30,12 @@ class WebD3Chart extends React.Component {
       },
       {
         title: '柱状图排序-黑色',
-        imgUrl: require('@/assets/images/chart_type/img_bar.png'),
-        webUrl: 'http://video.cross.webdev.com/h5/work/headlessWeb/chart/template/bar_sort_black.html'
+        imgUrl: require('@/assets/images/chart_type/img_bar_black.png'),
+        webUrl: 'http://video.cross.webdev.com/h5/work/headlessWeb/chart/template/bar_sort_black.html',
+        webSize: {
+          width: 1180,
+          height: 650
+        }
       },
       {
         title: '折线图',
@@ -44,10 +48,12 @@ class WebD3Chart extends React.Component {
       chartDomIdHor: 'chartBarContainer_hor',
       chartConfig: {},
       listData: cardData,
-      width: 870,
-      height: 540,
       title: '',
       visible: false,
+      iframe: {
+        width: 870,
+        height: 540,
+      }
     };
   }
 
@@ -119,15 +125,16 @@ class WebD3Chart extends React.Component {
     this.setState({
       title: item.title,
       chartWebUrl: item.webUrl,
-      visible: true
+      visible: true,
+      iframe: item.webSize || { width: 870, height: 540 }
     });
   }
 
   render = () => (
     <Wrapper>
       <Modal
-        width={this.state.width}
-        height={this.state.height}
+        width={this.state.iframe.width}
+        height={this.state.iframe.height}
         title={this.state.title}
         data-backdrop="static"
         visible={this.state.visible}
@@ -144,8 +151,8 @@ class WebD3Chart extends React.Component {
         <Iframe
           frameBorder='0'
           url={this.state.chartWebUrl}
-          width={this.state.width - 40}
-          height={this.state.height}
+          width={this.state.iframe.width - 40}
+          height={this.state.iframe.height}
           id="myId"
           display="initial"
           position="relative"

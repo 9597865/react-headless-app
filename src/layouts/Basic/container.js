@@ -109,7 +109,6 @@ class Container extends React.Component {
             <Menu
               mode="inline"
               theme="dark"
-              inlineCollapsed={this.state.collapsed}
               selectedKeys={[this.state.selectedCurrnetKey.toString()]}
               defaultSelectedKeys={[this.state.menuDefaultId.toString()]}
               onSelect={this.onSelect}
